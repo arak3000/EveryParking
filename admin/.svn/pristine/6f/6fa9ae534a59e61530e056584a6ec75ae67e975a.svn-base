@@ -1,0 +1,82 @@
+
+
+//let profitTable = {
+//gridOption:{},
+//grid : null,
+//initPage: function(){
+//let $this = this;
+//this.gridOption = {
+//cols : [
+//{title:"번호", name:"cost_seq", type:"number"}
+//, {title:"주차장명", name:"park_name"}
+//, {title:"차량 번호", name:"rese_car_no"}
+//, {title:"예약 시간", name:"rese_start", type:"date"}
+//, {title:"예약 가격", name:"park_price"}
+//, {title:"예약 날짜", name:"reg_date", type:"date"}
+//, {title : "수정", name: "modify", filter:function(data, rowData, ridx, cidx, $this){
+
+//return `<a href="/parkingManage/parkingRevise?PARK_SEQ=${rowData.PARK_SEQ}" class="btn btn-outline-primary btn-sm">수정</a>`
+//}},
+//{title : "삭제", name: "PARK_SEQ", filter:function(data, rowData, ridx, cidx, $this) {
+//return `<a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제</a>`
+//}},
+//],
+//// pagingEl : '#pagingBlock2',
+//getParam : getParam
+//};
+//this.grid = new Grid("#profitTable", $this.gridOption, "/profitCost/selectListprofitCost");
+//}
+//}
+
+
+//function getParam() {
+//return {}
+//}
+
+let profit = {
+		gridOption:{},
+		grid : null,
+
+		initPage: function(){
+			let $this = this;
+			this.gridOption = {
+					cols : [
+						{title:"번호", name:"cost_seq", type:"number"}
+						, {title:"주차장명", name:"park_name"}
+						, {title:"차량 번호", name:"rese_car_no"}
+						, {title:"예약 시간", name:"rese_start", type:"date"}
+						, {title:"예약 가격", name:"park_price"}
+						, {title:"예약 날짜", name:"reg_date", type:"date"}
+						, {title : "수정", name: "modify", filter:function(data, rowData, ridx, cidx, $this){
+
+							return `<a href="/parkingManage/parkingRevise?PARK_SEQ=${rowData.PARK_SEQ}" class="btn btn-outline-primary btn-sm">수정</a>`
+						}},
+						{title : "삭제", name: "PARK_SEQ", filter:function(data, rowData, ridx, cidx, $this) {
+							return `<a href="#" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제</a>`
+						}}
+						],
+						pagingEl : '#pagingBlock2',
+						getParam : getParam
+			};
+			this.grid = new Grid("#profitTable", $this.gridOption, "/profitCost/selectListProfitCost");
+		}
+}
+
+$(function(){
+	profit.initPage();
+	// alert, comfirm .. > cmm.alert()
+	// cmm.confirm
+
+
+	// cmm
+
+	// cmm.attachComma() >> 숫자 포맷 (콤마)
+	// cmm.formToJson()
+	// cmm.jsonToForm()
+	ajaxCall(
+
+	)
+})
+
+function getParam() {
+	return {}}

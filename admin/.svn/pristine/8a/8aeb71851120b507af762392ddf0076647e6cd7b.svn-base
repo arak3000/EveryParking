@@ -1,0 +1,13 @@
+package com.everyparking.admin.api.profitCost.dao;
+
+import java.util.HashMap;
+import java.util.List;
+
+public interface ProfitCostDao {
+
+	
+	public List<HashMap<String, Object>> selectListParkingCost(HashMap<String, Object> params) throws Exception;
+	public int selectListCountParkingCost(HashMap<String, Object> params) throws Exception;
+	public HashMap<String, Object> selectOneParkingCost(HashMap<String, Object> params) throws Exception;
+	
+}

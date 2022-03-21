@@ -1,0 +1,102 @@
+package com.everyparking.user.framework.common.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.everyparking.user.framework.common.service.CommonService;
+import com.everyparking.user.framework.common.vo.MemberVo;
+import com.everyparking.user.framework.common.util.SessionUtil;
+
+@Controller
+@RequestMapping("/login")
+public class LoginController extends BaseController {
+	
+	@Autowired
+	private CommonService commonService;
+	
+    @RequestMapping("/loginPage")
+    public String loginForm(){
+        return "/login/loginForm";
+    }
+
+    @RequestMapping("/register")
+    public String registerForm(Model model){
+    	List<HashMap<String, Object>> list = commonService.getSubCodeRoyalUser();
+    	model.addAttribute("getSubCodeRoyalUserList", list);
+        return "/login/register";
+    }
+    
+    @RequestMapping("/home")
+    public String mainHome() {
+    	return "../main/home";
+    }
+    
+    
+    @RequestMapping("/registerProcess")
+    public String registerProcess(MemberVo param
+    		, @RequestParam(value="SUB_CODE", required = false) String[] SUB_CODE
+    		) {
+    	
+    	System.out.println("시스템 로그] 회원가입 프로세스 실행");
+		System.out.println("시스템 로그] id : " + param.getUSER_MAIL() + " pw : " + param.getUSER_PW());
+    	Map<String, Object> data = new HashMap<String, Object>();
+		data.put("memberVo", param);
+		data.put("SUB_CODE", SUB_CODE);
+		commonService.registerMember(data);
+		
+		return "/login/welcome";
+    }
+    
+
+	@RequestMapping("/loginProcess")
+	public ModelAndView loginProcess(HttpServletRequest request, MemberVo param) throws Exception {
+		MemberVo sessionUser = commonService.login(param);
+		SessionUtil.setSessionData(request, "sessionUser", sessionUser );
+		ModelAndView mav = new ModelAndView();
+
+		if(sessionUser != null) {
+			//로그인 인증 성공 
+			mav.setViewName("redirect: /http://localhost:8123/parkingManage/adminHome");
+		} else {
+			//로그인 인증 실패
+			
+			
+			
+			
+			//수정해야됨
+			
+			
+			
+			
+			
+			
+			
+			
+			mav.setViewName("/login/loginForm");
+			mav.addObject("errMsg", "아이디 또는 비밀번호 오류입니다.");
+		}
+		
+		return mav;
+	}
+	
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

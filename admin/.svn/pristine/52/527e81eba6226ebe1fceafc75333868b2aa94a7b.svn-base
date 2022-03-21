@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everyparking.admin.api.profitCost.dao.profitCostDao">
+
+
+	<sql id="profitCostSql">
+        SELECT
+               pr.SEC_SEQ
+             , pr.RESE_CAR_NO
+             , pr.RESE_START
+             , pr.RESE_END
+             , pr.NOTE
+             , pr.REG_DATE
+             , ps.PARK_SEQ
+             , pp.PARK_NAME
+             , pp.PARK_PRICE
+             , pr.USE_YN
+        FROM P_RESERVATION pr, P_PARKINGINFO pp, P_SECTION ps
+        WHERE pp.PARK_SEQ = ps.PARK_SEQ AND ps.SEC_SEQ = pr.SEC_SEQ
+          AND pr.USE_YN = 'Y'
+    </sql>
+    <sql id="profitCostSearch">
+        <if test='pp.PARK_NAME != null and !pp.PARK_NAME.equals("")'>
+            pp.PARK_NAME LIKE CONCAT('%', #{PARK_SEQ}, '%')
+        </if>
+        <if test='pr.REG_DATE != null and !pr.REG_DATE.equals("")'>
+            pr.REG_DATE LIKE CONCAT('%', #{pr.REG_DATE}, '%')
+        </if>
+    </sql>
+
+
+
+    <select id="selectListprofitCost" parameterType="hashMap" resultType="hashMap">
+        /* profitCostMapper.selectListProfitCost [ 수익 조회 목록 - 김장문 ]  */
+        <include refid="profitCostSql"></include>
+        <include refid="profitCostSearch"></include>
+        <if test='PAGING_YN!=null and PAGING_YN.equals("Y")'>
+            <if test='ORDER != null and !ORDER.equals("")'>
+                ORDER BY ${ORDER} ${ORDER_TYPE}
+            </if>
+            LIMIT #{START}, #{CNT}
+        </if>
+    </select>
+
+    <select id="selectListCountprofitCost" parameterType="hashMap" resultType="int">
+        /* profitCostMapper.selectListCountProfitCost [ 수익 목록카운트 조회 - 김장문 ]  */
+        SELECT COUNT(*) FROM(
+            <include refid="profitCostSql"></include>
+            <include refid="profitCostSearch"></include>
+        )z
+    </select>
+
+
+    
+</mapper>

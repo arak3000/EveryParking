@@ -1,0 +1,37 @@
+package com.everyparking.admin.view.profitCost.controller;
+
+import com.everyparking.admin.framework.common.controller.BaseController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/profitCost")
+public class ProfitCostController extends BaseController {
+
+
+    @RequestMapping("/costTable")
+    public String test12() {
+        return "/profitCost/costTable";
+    }
+
+    @RequestMapping("/costInsertForm")
+    public String test12_1() {
+        return "/profitCost/costInsertForm";
+    }
+
+    @RequestMapping("/profitTable")
+    public String test13() {
+        return "/profitCost/profitTable";
+    }
+
+    @RequestMapping("/profitChart")
+    public String test14() {
+        return "/profitCost/profitChart";
+    }
+
+    @RequestMapping("/reservationInquiry")
+    public String test15() {
+        return "/profitCost/reservationInquiry";
+    }
+
+}

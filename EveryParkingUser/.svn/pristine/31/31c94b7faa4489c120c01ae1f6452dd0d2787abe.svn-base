@@ -1,0 +1,68 @@
+package com.everyparking.user.framework.common.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.everyparking.user.framework.common.dao.CommonDao;
+import com.everyparking.user.framework.common.vo.MemberVo;
+import com.everyparking.user.framework.common.util.MessageDigestUtil;
+
+@Service
+public class CommonService {
+
+    @Autowired
+    CommonDao commonDao;
+    
+    public void registerMember(Map<String, Object> data) {
+    	
+    	//회원가입쪽 비밀번호 해싱
+    	MemberVo vo = (MemberVo) data.get("memberVo");
+    	String password = vo.getUSER_PW();
+    	
+    	password = MessageDigestUtil.getPasswordHashCode(password);
+    	vo.setUSER_PW(password);
+    	
+    	int USER_SEQ = commonDao.registerMember(vo);
+    	String[] SUB_CODE_List = (String[]) data.get("SUB_CODE");
+    	for(String SUB_CODE : SUB_CODE_List) {
+    		HashMap<String, Object> param = new HashMap<String, Object>();
+    		param.put("USER_SEQ", USER_SEQ);
+    		param.put("SUB_CODE", SUB_CODE);
+    		commonDao.insertSUBCODE(param);
+    	}
+    	
+    }
+
+	public MemberVo login(MemberVo vo) {
+		
+		//로그인쪽 비밀번호 해싱
+    	String password = vo.getUSER_PW();
+    	password = MessageDigestUtil.getPasswordHashCode(password);
+    	vo.setUSER_PW(password);
+		
+		MemberVo result = commonDao.getMemberByIdAndPw(vo);
+		return result;
+	}
+	
+	public boolean isExistId(String USER_MAIL) {
+		
+		int count = commonDao.getCountById(USER_MAIL);
+		
+		if(count > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	//우대사항 코드
+	public List<HashMap<String, Object>> getSubCodeRoyalUser() {
+		return commonDao.getSubCodeRoyalUser();
+	}
+	
+	//
+}

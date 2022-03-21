@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everyparking.user.api.main.dao.MainDao">
+
+
+	<!-- // 3/16 장문 지도 작업 부분 -->
+
+	<!-- <sql id="mainSql">
+		SELECT (
+				PARK_SEQ,
+				USER_SEQ,
+				FILE_SEQ,
+				PARK_NAME,
+				PARK_ADDR1,
+				PARK_ADDR2,
+				PARK_ADDR_X,
+				PARK_ADDR_Y,
+				PARK_CALL_NUM,
+				PARK_CONT,
+				PARK_OPEN,
+				PARK_CLOSE,
+				PARK_PRICE,
+				REG_SEQ,
+				REG_DATE,
+				MOD_SEQ,
+				MOD_DATE,
+				NOTE,
+				USE_YN
+				)
+		FROM p_parkinginfo
+		WHERE 1=1
+		AND USE_YN = 'Y'
+  	</sql>
+ -->
+ 
+ 	<select id="selectParkingInfoList" parameterType="hashMap" resultType="hashMap">
+ 		/* MainMapper.selectMarkerList [ 주차장 정보 조회 - 김장문 ] */
+		SELECT PARK_SEQ,
+				USER_SEQ,
+				FILE_SEQ,
+				PARK_NAME,
+				PARK_ADDR1,
+				PARK_ADDR2,
+				PARK_ADDR_X,
+				PARK_ADDR_Y,
+				PARK_CALL_NUM,
+				PARK_CONT,
+				PARK_OPEN,
+				PARK_CLOSE,
+				PARK_PRICE,
+				REG_SEQ,
+				REG_DATE,
+				MOD_SEQ,
+				MOD_DATE,
+				NOTE,
+				USE_YN
+		FROM p_parkinginfo
+		WHERE 1=1
+		AND USE_YN = 'Y'
+  	</select>
+ 
+
+	<select id="selectParkingInfoListCount" parameterType="hashMap" resultType="int">
+		/* MainMapper.selectMarkerListCount [ 마커 좌표 개수 조회 - 김장문 ] */
+		SELECT COUNT(*)
+		FROM p_parkinginfo
+	</select>
+
+	
+	<select id="selectOneParkingInfo" parameterType="hashMap" resultType="hashMap">
+		/* MainMapper.selectOneParkingInfo [ 주차장 개별 정보 조회 - 김장문 ] */
+		SELECT PARK_SEQ,
+				USER_SEQ,
+				FILE_SEQ,
+				PARK_NAME,
+				PARK_ADDR1,
+				PARK_ADDR2,
+				PARK_ADDR_X,
+				PARK_ADDR_Y,
+				PARK_CALL_NUM,
+				PARK_CONT,
+				PARK_OPEN,
+				PARK_CLOSE,
+				PARK_PRICE,
+				REG_SEQ,
+				REG_DATE,
+				MOD_SEQ,
+				MOD_DATE,
+				NOTE,
+				USE_YN
+		FROM p_parkinginfo
+		WHERE 1=1
+		AND PARK_SEQ = #{PARK_SEQ}
+		AND USE_YN = 'Y'
+	</select>
+
+
+</mapper>
