@@ -28,7 +28,12 @@ public class ParkingBlockController extends BaseController {
     }
 
     @RequestMapping("/parkingBlockRegister")
-    public String parkingBlockRegister() {
+    public String parkingBlockRegister(Model model) throws Exception {
+
+        HashMap<String, Object> data = new HashMap<String, Object>();
+
+        model.addAttribute("list", parkingInfoService.selectListParkingInfo(data));
+
         return "/parkingBlock/parkingBlockRegister";
     }
     

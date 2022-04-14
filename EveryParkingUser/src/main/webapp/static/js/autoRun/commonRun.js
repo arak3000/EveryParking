@@ -12,6 +12,7 @@ const readEditor = document.getElementById('readEditor');
 const writeEditor = document.getElementById('writeEditor');
 const testGridid = document.getElementById('testGrid');
 const testajax = document.getElementById('testajax');
+let editor;
 
 // 시간을 포함해서 날짜를 선택해야할때
 if(datepickerR) {
@@ -22,7 +23,7 @@ if(datepickerR) {
         timePicker24Hour: true,
         locale: {
             "separator": " ~ ",                     // 시작일시와 종료일시 구분자
-            "format": 'YYYY년 MM월 DD일 HH시',                 // 일시 노출 포맷
+            "format": 'YYYY-MM-DD HH시',             // 일시 노출 포맷
             "applyLabel": "확인",                    // 확인 버튼 텍스트
             "cancelLabel": "취소",                   // 취소 버튼 텍스트
             "daysOfWeek": ["일", "월", "화", "수", "목", "금", "토"],
@@ -94,12 +95,12 @@ if(readEditor){
 
 // ckeitor 작성을 위한 함수입니다.
 if(writeEditor){
-    let editor;
 
     ClassicEditor
-        .create( writeEditor , {
+        .create( document.querySelector( '#writeEditor' ) , {
+            placeholder: '여기서 본문을 작성해주세요',
             ckfinder: {
-                uploadUrl: 'http://localhost:8123/test/imageUpload'
+                uploadUrl: '/admin/editor/uploadView'
             }
         } )
         .then( newEditor => {
@@ -117,7 +118,7 @@ if(writeEditor){
             console.error( error );
         } );
 
-    function uploadData() {
+    function uploadDataExample() {
         const editorData = editor.getData();
         console.log(typeof(editorData));
 
@@ -168,22 +169,35 @@ function postcoderun() {
 
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
             document.getElementById('postcodeName').value = addr;
+
+
             //주소-좌표 변환 객체를 생성합니다
             transGeocode();
-        }
+        },
+        onresize: function (size) {
+            element_wrap.style.height = 400 + 'px';
+        },
+        width: '100%'
     }).open();
 }
 
-function transGeocode() {
+function transGeocode(obj) {
     var geocoder = new kakao.maps.services.Geocoder();
     geocoder.addressSearch(addr, function(result, status) {
-        console.log(result);
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
-
-            document.getElementById('postcodeX').value = result[0].x;
-            document.getElementById('postcodeY').value = result[0].y;
-
+            if(document.getElementById('postcodeX')) {
+                document.getElementById('postcodeX').value = result[0].x;
+                document.getElementById('postcodeY').value = result[0].y;
+                if(typeof panTo != "undefined") {
+                	panTo()
+                };
+            }
+            if(obj == document.getElementById('navSearch') || obj == document.getElementById('searchIcon')) {
+                document.getElementById('navpostcodeX').value = result[0].x;
+                document.getElementById('navpostcodeY').value = result[0].y;
+                document.getElementById('navSearch').submit();
+            }
         }
     });
 }
@@ -200,20 +214,31 @@ var sidebarBox = document.querySelector("#sideBox");
 var cateBtn = document.querySelector(".category-btn");
 var mySideBox = document.querySelector("#mySideBox");
 var myBtn = document.querySelector(".my-btn");
+var clickCateIcon = document.getElementById("clickCateIcon");
+var clickMyIcon = document.getElementById("clickMyIcon");
+var clickCateText = document.getElementById("clickCateText");
+var clickMyText = document.getElementById("clickMyText");
+
 
 function cateToggle(){
     if(mySideBox.classList.contains('show-mySideBar')){
         mySideBox.className="my-sideBar";
+        clickMyIcon.classList.remove('clickNav');
+        clickMyText.classList.remove('clickNav');
     }
     // sidebarBox.classList.toggle('show-cateSideBar');
     var hasClass = sidebarBox.classList.contains("cate-sideBar");
     if(!hasClass){
         // cate-sideBar가 없을 때,
         sidebarBox.className="cate-sideBar";
+        clickCateIcon.classList.remove('clickNav');
+        clickCateText.classList.remove('clickNav');
         //sidebarBox.classList.add("cate-sideBar");
     } else{
         // cate-sideBar가 있을 때,
         sidebarBox.className="show-cateSideBar";
+        clickCateIcon.classList.add('clickNav');
+        clickCateText.classList.add('clickNav');
         //sidebarBox.classList.add("showSideBar");
     }
 }
@@ -222,16 +247,23 @@ cateBtn.addEventListener('click', cateToggle);
 function myPageToggle(){
     if(sidebarBox.classList.contains('show-cateSideBar')){
         sidebarBox.className="cate-sideBar";
+        clickCateIcon.classList.remove('clickNav');
+        clickCateText.classList.remove('clickNav');
     }
-
     var hasClass = mySideBox.classList.contains("my-sideBar");
     if(!hasClass){
         mySideBox.className="my-sideBar";
+        clickMyIcon.classList.remove('clickNav');
+        clickMyText.classList.remove('clickNav');
     }else{
         mySideBox.className= "show-mySideBar";
+        clickMyIcon.classList.add('clickNav');
+        clickMyText.classList.add('clickNav');
     }
 }
 myBtn.addEventListener('click', myPageToggle);
+
+
 
 
 // 예약취소 버튼 출현
@@ -271,7 +303,6 @@ if(reservationStateBox) {
         spanBox.innerText = "예약완료";
         h6Box.appendChild(spanBox);
 
-
     }
 
 // 예약취소 실행 함수
@@ -280,21 +311,6 @@ if(reservationStateBox) {
     }
 
 }
-
-
-// 버튼 버블 css 형성
-var areaSelectBtnList = document.querySelectorAll('.areaSelect button');
-for(var i=0; i<areaSelectBtnList.length; i++){
-    areaSelectBtnList[i].addEventListener('click', Handlerbubble);
-}
-function Handlerbubble(evt) {
-    for(var i=0; i<areaSelectBtnList.length; i++){
-        areaSelectBtnList[i].setAttribute("class", "btn fw-bold text-white");
-    }
-    var eventNode = evt.target;
-    eventNode.setAttribute("class", "btn bubble fw-bold text-primary");
-}
-
 
 // 별점 구현
 // 별점
@@ -315,31 +331,45 @@ function color(event) {
     switch(num) {
         case 1:  // if (x === 'value1')
             chooseWord.style.color = 'red';
-            chooseWord.innerText = "1점 별로에요";
             break;
 
         case 2:  // if (x === 'value2')
             chooseWord.style.color = 'red';
-            chooseWord.innerText = "2점 그저그래요";
             break;
 
         case 3:  // if (x === 'value2')
             chooseWord.style.color = 'red';
-            chooseWord.innerText = "3점 괜찮아요";
             break;
 
         case 4:  // if (x === 'value2')
             chooseWord.style.color = 'red';
-            chooseWord.innerText = "4점 좋아요";
             break;
 
         case 5:  // if (x === 'value2')
             chooseWord.style.color = 'red';
-            chooseWord.innerText = "5점 최고에요";
             break;
     }
 }
 
 for(var i=0; i<checkStar.length; i++){
-    checkStar[i].addEventListener("click", color);
+    checkStar[i].addEventListener("change", color);
+}
+document.querySelector('body').addEventListener('click', e => {
+        foldDaumPostcode();
+});
+
+/*
+ *  작성자 : 홍종화
+ *  작성일 : 22-04-03
+ *  html escape 용 함수
+ */
+function escapeHtml(str) {
+	var map = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#039;'
+	};
+	return str.replace(/[&<>"']/g, function(m) { return map[m]; });
 }

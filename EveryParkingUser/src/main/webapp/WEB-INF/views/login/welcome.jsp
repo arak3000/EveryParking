@@ -6,12 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="container-fluid">
-    <div class="row joinBox mx-auto mt-5">
+<div class="container-fluid" style="background-image: url('/img/mainBackground.png');">
+    <div class="row mx-auto mt-5">
         <div class="col">
             <div class="row my-4">
                 <div class="col text-center">
-                    <img class="logoMain mt-5" src="/img/logoBG.jpg">
+                    <img class="logoMain mt-5" src="/img/newLogo.png">
                 </div>
             </div>
 
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="row mt-5 mb-5 mx-1 pb-4">
-                <div class="col d-grid"><button class="buttonBox" onclick="location.href='loginPage'">로그인 페이지로 이동</button></div>
+                <div class="col d-grid"><button class="buttonBox longBtn" onclick="location.href='loginPage'">로그인 페이지로 이동</button></div>
             </div>
         </div>
     </div>

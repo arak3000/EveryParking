@@ -13,7 +13,7 @@ let parkingZone = {
                     return `<a href="/parkingManage/parkingRevise?PARK_SEQ=${rowData.PARK_SEQ}" class="btn btn-outline-primary btn-sm">수정</a>`
                 }, colWidth:"10"},
                 {title : "삭제", name: "PARK_SEQ", filter:function(data, rowData, ridx, cidx, $this) {
-                    return `<a class="btn btn-outline-danger btn-sm" onclick="">삭제</a>`
+                    return `<a class="btn btn-outline-danger btn-sm" onclick="parkingZone.deleteRow(${ridx})">삭제</a>`
                 }, colWidth:"10"},
             ],
             pagingEl : '#pagingBlock2',

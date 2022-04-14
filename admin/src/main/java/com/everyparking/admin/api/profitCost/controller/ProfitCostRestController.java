@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -75,11 +76,16 @@ public class ProfitCostRestController extends BaseController {
     }
     
     
-    @RequestMapping("/selectProfitChartDataByMonth")
-    public ModelAndView selectProfitChartDataByMonth(@RequestBody HashMap<String, Object> params) throws Exception{
+    @RequestMapping("/selectReserChartDataByParkSeq")
+    public ModelAndView selectReserChartDataByParkSeq(@RequestParam HashMap<String, Object> params) throws Exception{
+    	HashMap<String, Object> map = new HashMap<String, Object>();
+    	
     	ModelAndView mav = super.createMav();
+    	map.put("reserList", profitCostService.selectChartByParkSeqAndYear(params));
+    	map.put("costList", profitCostService.selectCostChartByParkSeqAndYear(params));
+    	
     	try {
-    		mav = super.createMav(profitCostService.selectProfitChartDataByMonth());
+    		mav = super.createMav(map);
         }catch (Exception e){
             logger.error(e.getMessage());
             super.setMessage(mav, Ajax.SEARCH.TEXT+"."+Ajax.FAIL);
@@ -88,4 +94,15 @@ public class ProfitCostRestController extends BaseController {
     }
     
     
+    @RequestMapping("/selectSearchYear")
+    public ModelAndView selectSearchYear() throws Exception {
+    	ModelAndView mav = super.createMav();
+    	try {
+    		mav = super.createMav(profitCostService.selectSearchYear());
+    	}catch (Exception e) {
+			logger.error(e.getMessage());
+			super.setMessage(mav, Ajax.SEARCH.TEXT+"."+Ajax.FAIL);
+		}
+    	return mav;
+    }
 }

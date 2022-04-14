@@ -232,6 +232,9 @@ var Grid = function(tblEl, options, searchApiUrl){
 
         if(this.searchCondition){
             params.SEARCHCOND = this.searchCondition;
+        }
+
+        if(this.searchKey) {
             params.SEARCHKEY = this.searchKey;
         }
 
@@ -272,7 +275,7 @@ var Grid = function(tblEl, options, searchApiUrl){
      * @returns {*}
      */
     this.getRowData = function(ridx){
-        return this.list[ridx-1];
+        return this.list[ridx];
     }
 
     /**
@@ -352,20 +355,21 @@ var Grid = function(tblEl, options, searchApiUrl){
             $this.setRange();
             let html = ``;
             html += ``;
-            html += `<ul class="pagination">`;
-            html += `    <li class="page-item ${$this.pagingOpt.page == 1 ? 'disabled' : ''}">`;
-            html += `        <a class="page-link" type="button" onclick="girdPageMove('${$this.selector}', ${$this.pagingOpt.page-1})"><i class="bi bi-arrow-left-circle"></i></a>`;
+            html += `<ul class="pagination link">`;
+            html += `    <li>`;
+            html += `        <a class="first ${$this.pagingOpt.page == 1 ? 'nonePointer' : ''}" onclick="girdPageMove('${$this.selector}', ${$this.pagingOpt.page-1})">&lt;</a>`;
             html += `    </li>`;
             for(let pageNum=$this.pagingOpt.start; pageNum<=$this.pagingOpt.end; pageNum++) {
                 if(pageNum==$this.pagingOpt.page) {
-                    html += `    <li class="page-item active">`;}
+                    html += `    <li>`;
+                	html += `        <a class="active num" onclick="girdPageMove('${$this.selector}', ${pageNum})"}">${pageNum}</a>`;}
                 else {
-                    html += `    <li class="page-item">`; }
-                html += `        <a class="page-link" type="button" onclick="girdPageMove('${$this.selector}', ${pageNum})"}">${pageNum}</a>`;
+                    html += `    <li>`;
+                	html += `        <a class="num" onclick="girdPageMove('${$this.selector}', ${pageNum})"}">${pageNum}</a>`;}
                 html += `    </li>`;
             }
-            html += `    <li class="page-item ${$this.pagingOpt.page == $this.pagingOpt.max ? 'disabled' : ''}">`;
-            html += `        <a class="page-link" type="button"  onclick="girdPageMove('${$this.selector}', ${$this.pagingOpt.page+1})"><i class="bi bi-arrow-right-circle"></i></a>`;
+            html += `    <li>`;
+            html += `        <a class="last ${$this.pagingOpt.page == 1 ? 'nonePointer' : ''}" onclick="girdPageMove('${$this.selector}', ${$this.pagingOpt.page+1})">&gt;</a>`;
             html += `    </li>`;
             html += `</ul>`;
             html += ``;
@@ -455,7 +459,7 @@ function searchGrid(gridSelector, condition, key){
     if(condition != ''){
         $this.searchCondition = condition;
     }
-    $this.reSearch();
+    $this.search();
 }
 
 /**

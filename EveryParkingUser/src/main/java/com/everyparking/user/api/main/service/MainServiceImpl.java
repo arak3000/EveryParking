@@ -1,7 +1,10 @@
 package com.everyparking.user.api.main.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +25,14 @@ public class MainServiceImpl implements MainService {
 	
 	@Override
 	public List<HashMap<String, Object>> selectParkingInfoList(HashMap<String, Object> params) throws Exception {
-		return mainDao.selectParkingInfoList(params);
+		
+		List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		
+		for(HashMap<String, Object> data : mainDao.selectParkingInfoList(params)) {
+			data.put("sectionList", mainDao.selectSectionList(data));
+			list.add(data);
+		}
+		return list;
 	}
 	
 	
@@ -54,17 +64,51 @@ public class MainServiceImpl implements MainService {
 	 public int selectReviewListCount(HashMap<String, Object> params) throws Exception {
         return mainDao.selectReviewListCount(params);
     }
-
-
-	@Override
-	public List<HashMap<String, Object>> selectParkingInfoListByMap(HashMap<String, Object> params) throws Exception {
-		return mainDao.selectParkingInfoListByMap(params);
-	}
-
-
-	@Override
-	public int selectParkingInfoListCountByMap(HashMap<String, Object> params) throws Exception {
-		return mainDao.selectParkingInfoListCountByMap(params);
-	}
 	
+
+	@Override
+	public List<HashMap<String, Object>> selectSectionInfoForRese(HashMap<String, Object> params) throws Exception {
+		
+		List<HashMap<String, Object>> dataList = new ArrayList<HashMap<String, Object>>();		
+		 
+		for(HashMap<String, Object> reseList : mainDao.selectSectionInfoForRese(params)) {
+			for(HashMap<String, Object> userList : mainDao.getUserInfo(params)) {
+				if(reseList.get("SEC_TYPE").toString().equals(userList.get("RU_TYPE").toString()) ) {
+					dataList.add(reseList);
+				}
+			}
+		}
+		return dataList;
+	}
+
+
+	@Override
+	public int insertReservation(HashMap<String, Object> params) throws Exception {
+		return mainDao.insertReservation(params);
+	}
+
+	@Override
+	public int deleteReservation(HashMap<String, Object> params) throws Exception {
+		return mainDao.deleteReservation(params);
+	}
+
+
+	@Override
+	public HashMap<String, Object> checkLogin(HashMap<String, Object> params) throws Exception {
+		return null;
+	}
+
+
+	@Override
+	public List<HashMap<String, Object>> getUserPublishCoupon(HashMap<String, Object> params) throws Exception {
+		return mainDao.getUserPublishCoupon(params);
+	}
+
+
+	@Override
+	public void updateUserCoupon(HashMap<String, Object> params) throws Exception {
+		mainDao.updateUserCoupon(params);
+		
+	}
+
 }

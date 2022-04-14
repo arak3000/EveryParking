@@ -1,67 +1,42 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>  
 <div class="container-fluid">
-  <header>
-    <div class="row headerBox py-2 px-0">
-      <div class="col-1 px-0"><i class="bi bi-arrow-left fs-5"></i></div>
-      <div class="col px-0">
-        <h5 class="title">문의 사항</h5>
-      </div>
-      <div class="col-1 px-0"></div>
-    </div>
-  </header>
+	<header>
+        <div class="row headerBox py-2 px-0">
+            <div class="col px-0">
+                <h5 class="title">문의하기</h5>
+            </div>
+        </div>
+    </header>
   <main>
     <!-- 수정 해야되는 부분-->
     <div class="row" style="margin-top: auto;">
       <div class="col">
         <div class="row">
           <div class="col p-0">
-            <img src="../img/qna.png" class="img-fluid">
+            <img src="/img/testQnA.png" class="img-fluid">
           </div>
         </div>
         <div class="row">
-          <div class="col" style="border-top: solid 3px #1187cf;"></div>
+          <div class="col" style="border-top: solid 3px #5865f2;"></div>
         </div>
-        <div class="row mt-2">
-          <div class="col">
-            <table class="table text-center" style="font-size: 14px; color: #a6a6a6;">
-              <thead class="table-light">
-              <tr>
-                <th scope="col" style="color: #1187cf;">제목</th>
-                <th scope="col" style="color: #1187cf;">작성자</th>
-                <th scope="col" style="color: #1187cf;">등록일</th>
-                <th scope="col" style="color: #1187cf;">답변 상태</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <th scope="row">제목이 들어가요</th>
-                <td>전지나</td>
-                <td>22-03-05</td>
-                <td>답변중</td>
-              </tr>
-              <tr>
-                <th scope="row"></th>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <th scope="row"></th>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              </tbody>
+        <div class="row mt-2" style="background-color:white;">
+          <div class="col px-0">
+            <table class="table text-center" id="qnaManageTable" style="font-size:0.7rem; color: #a6a6a6;">
             </table>
           </div>
         </div>
-        <div class="row my-4">
+        <div id="pagingBlock4" style="display: flex; justify-content: center; bottom: 1%; margin-top:1rem;"></div>				
+    <c:if test="${!empty sessionUser }">        			
+        <div class="row mt-3">
           <div class="col btnBox">
-            <button class="insertBtn btn btn-primary">문의하기</button>
+            <a href="./write"><button class="longBtn" style="width: 5.5rem;">문의하기</button></a>
           </div>
         </div>
+    </c:if>
       </div>
     </div>
   </main>
 </div>
+<script type="text/javascript" src="/js/operation/qnaManage/qnaManage.js"></script>

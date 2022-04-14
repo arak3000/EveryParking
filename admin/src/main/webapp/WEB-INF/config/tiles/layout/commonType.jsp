@@ -2,21 +2,24 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <jsp:include page="headPart/commInclude.jsp"></jsp:include>
     <tiles:insertAttribute name="title"/>
-</head>
-    <body>
-        <div class="mb-5">
-            <div class="container-fluid">
-                <div class="row mt-5 bodyBox">
-                    <!-- 왼편 사이드바 -->
-                        <tiles:insertAttribute name="menu"/>
-                    <!-- 본문 -->
-                        <tiles:insertAttribute name="body"/>
-                </div>
-            </div>
-        </div>
-    </body>
-    <jsp:include page="bottomPart/commInclude.jsp"></jsp:include>
+  </head>
+
+  <body>
+    <!-- wrap -->
+    <div class="wrap">
+    <tiles:insertAttribute name="menu"/>
+    <tiles:insertAttribute name="body"/>
+    
+    </div>
+    <!-- // wrap -->
+    <!-- script -->
+	<jsp:include page="bottomPart/commInclude.jsp"></jsp:include>
+    <!-- // script -->
+
+  </body>
 </html>

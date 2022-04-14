@@ -1,84 +1,100 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<div class="col mx-3">
+         pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+      <div class="content">
 
-	<!--Top title-->
-	<div class="row">
-		<div class="col px-0 text-start">
-			<h1 style="font-weight: bold;">
-				차단 시간 설정<span class="fs-6 fw-light"> 사용자의 예약을 차단할 시간을 설정해주세요</span>
-			</h1>
-		</div>
-	</div>
+        <!-- top -->
+        <div class="top">
+          <div class="title">
+            <h1> 차단 시간 등록 </h1>
+            <span> 주차장 관리 > 차단 시간 설정 > 차단 시간 등록 </span>
+          </div>
 
-	<!-- 내용 -->
-	<div class="row mt-4 mb-3 backgroundColorwhite adminBorder borderBottom" style="height: 600px;">
-		<div class="col">
-			<div class="row">
-				<div class="col ms-5 mt-5 mb-4">
-					<h4 style="font-weight: bold;">주차장 이용 불가 시간을 설정해주세요</h4>
-				</div>
-			</div>
+        </div>
+        <!-- // top -->
+        <form id="blockFormData" name="blockFormData" method="post">
+        <!-- mainCon -->
+        <div class="mainCon">
 
-			<div class="row mt-3">
-				<div class="col-4 px-0">
-					<img class="img-fluid" src="/img/image1.png">
-				</div>
+          <!-- mainConWrap -->
+          <div class="mainConWrap">
 
-				<div class="col ms-1">
-					<div class="row me-3">
-						<div class="col-4 mt-1">주차장 선택</div>
-						<div class="col">
-							<select class="form-select inputPlusSelectBox" aria-label="주차장명">
-								<option selected>클릭하면 아래 창에서 선택</option>
-								<option value="parkingLot_name">a주차장</option>
-								<option value="parkingLot_name">b주차장</option>
-								<option value="parkingLot_name">c주차장</option>
-							</select>
-						</div>
-					</div>
-					<div class="row me-3 mt-3">
-						<div class="col-4 mt-1">차단 시간</div>
-						<div class="col inputPlusSelectBox">
-							<input type="text" id="datepickerR" name="daterange" class="datepicker" style="width: 100%; height: 35px; padding-left: 10px; border:1px solid #ced4da; color: rgb(94, 94, 94);"/>
-						</div>
-					</div>
-					<div class="row me-3 mt-3">
-						<div class="col-4 mt-1">주차장 구역 선택</div>
-						<div class="col">
-							<select class="form-select inputPlusSelectBox" aria-label="주차장구역">
-								<option selected>클릭하면 아래 창에서 선택</option>
-								<option value="category_name">여성전용</option>
-								<option value="category_name">전기차</option>
-								<option value="category_name">일반</option>
-							</select>
-						</div>
-					</div>
-					<div class="row me-3 mt-3">
-						<div class="col-4 mt-1">구역 개수 설정</div>
-						<div class="col">
-							<input type="number" name="section_count" min="1" max="20" style="border: 1px solid #ced4da">
-						</div>
-					</div>
-					<div class="row me-3 mt-3">
-						<div class="col-4 mt-1">사유 작성</div>
-						<div class="col">
-							<form>
-								<textarea row="5" col="50" class="inputPlusSelectBox" style="width: 100%; height: 150px; border-radius: 0.25rem; border: 1px solid #ced4da" placeholder="이용 불가된 사유를 작성해주세요"></textarea>
-							</form>
-						</div>
-					</div>
+            <!-- imgWrap -->
+            <div class="imgWrap">
+              <img src="/img/parkingLot.svg">
+            </div>
+            <!-- // imgWrap -->
 
-					<div class="row me-3 mt-4 pt-2">
-						<div class="col"></div>
-						<div class="col-5 text-end d-gird">
-							<form action="">
-								<button type="button" class="btn btn-outline-primary">등록완료</button>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+            <!-- step -->
+            <div class="step">
+              <section class="stepTitle">
+                <h2> 주차장 이용 불가 시간을 설정해주세요. </h2>
+              </section>
+              <section class="stepConWrap">
+                
+                <!-- tableWrap_3 -->
+                <div class="tableWrap_3 full-table">
+
+                  <!-- table -->
+                  <table class="table">
+                    <colgroup>
+                      <col style="width:25%;">
+                      <col style="width:75%;">
+                    </colgroup>
+                    <tr>
+                      <th> 주차장 선택 </th>
+                      <td>
+                        <!-- dropDownBox02 -->
+                          <select class="inputPlusSelectBox input_2" required>
+                            <c:forEach items="${list}" var="data">
+			                                    <option value="${data.PARK_SEQ}">${data.PARK_NAME}</option>
+			                        </c:forEach>
+                          </select>
+                        <!-- // dropDownBox02 -->
+                      </td>
+                    </tr>
+                    <tr>
+                      <th> 기간 선택 </th>
+                      <td class="calendarWrap">
+                        <input name="daterange" class="datepicker" id="datepickerR" type="text" onchange="inputChange(this)">
+                        <span class="calendar"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th> 구역 설정 </th>
+                      <td id="selectSection">
+                        주차장을 선택 후 시간을 설정해주세요
+                      </td>
+                    </tr>
+                    <tr>
+                      <th> 사유 작성 </th>
+                      <td class="textareaWrap">
+                        <textarea rows="12" placeholder="차단 사유를 작성해주세요." name="BLO_CONT" id="BLO_CONT"></textarea>
+                      </td>
+                    </tr>
+                  </table>
+                  <!-- // table -->
+
+                </div>
+                <!-- // tableWrap_3 -->
+
+              </section>
+
+              <!-- rightBottomBtn -->
+              <div class="rightBottomBtn">
+                <button type="button" onclick="history.back();"> 이전 단계 </button>
+                <button type="button" onclick="blockRegister()"> 등록하기 </button>
+              </div>
+              <!-- // rightBottomBtn -->
+              
+            </div>
+            <!-- // step -->
+
+          </div>
+          <!-- // mainConWrap -->
+
+        </div>
+        <!-- // mainCon -->
+      </form>
+      </div>
+<script src="/js/parkingBlock/parkingBlockRegi.js"></script>

@@ -1,6 +1,8 @@
 package com.everyparking.admin.framework.common.controller;
 
+import com.everyparking.admin.api.parkingBlock.service.ParkingBlockService;
 import com.everyparking.admin.api.profitCost.service.ProfitCostService;
+import com.everyparking.admin.api.userhistory.service.UserHistoryService;
 import com.everyparking.admin.framework.common.view.JxlsExcelDownView;
 import com.everyparking.admin.framework.common.view.PoiExcelDownView;
 import org.slf4j.Logger;
@@ -29,6 +31,12 @@ public class ExcelController extends BaseController {
 
         @Autowired
         ProfitCostService profitCostService;
+
+        @Autowired
+        ParkingBlockService parkingBlockService;
+        
+        @Autowired
+        UserHistoryService userHistoryService;
 
         /** 작성자: 김청룡
          *  작성일: 22-03-11
@@ -108,14 +116,40 @@ public class ExcelController extends BaseController {
 
 
         @RequestMapping("/profitCost")
-        public ModelAndView selectListProfitCost(HttpServletResponse response, @RequestParam HashMap<String,Object> params) throws Exception{
+        public ModelAndView selectListProfitCost(@RequestParam HashMap<String,Object> params) throws Exception{
                 HashMap<String, Object> result = new HashMap<>();
                 result.put("list", profitCostService.selectListProfitCost(params));
                 result.put("today", new Date());
                 Map<String, Object> data = new HashMap<String, Object>();
                 data.put("data", result);
                 data.put("template", "profitCost");
-                data.put("newfileName", "장문엑셀");
+                data.put("newfileName", "profitList");
+
+                return new ModelAndView(jv, data);
+        }
+
+        @RequestMapping("/parkingBlock")
+        public ModelAndView blockList(@RequestParam HashMap<String,Object> params) throws Exception{
+                HashMap<String, Object> result = new HashMap<>();
+                result.put("list", parkingBlockService.selectListParkingBlock(params));
+                result.put("today", new Date());
+                Map<String, Object> data = new HashMap<String, Object>();
+                data.put("data", result);
+                data.put("template", "parkingBlock");
+                data.put("newfileName", "blockList");
+
+                return new ModelAndView(jv, data);
+        }
+        
+        @RequestMapping("/userHistory")
+        public ModelAndView userHistory(@RequestParam HashMap<String,Object> params) throws Exception{
+                HashMap<String, Object> result = new HashMap<>();
+                result.put("list", userHistoryService.selectListHistory(params));
+                result.put("today", new Date());
+                Map<String, Object> data = new HashMap<String, Object>();
+                data.put("data", result);
+                data.put("template", "userHistory");
+                data.put("newfileName", "userHistory");
 
                 return new ModelAndView(jv, data);
         }

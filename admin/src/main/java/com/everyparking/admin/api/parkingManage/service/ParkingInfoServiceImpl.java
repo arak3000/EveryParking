@@ -44,7 +44,7 @@ public class ParkingInfoServiceImpl implements ParkingInfoService{
     @Override
     public int insertParkingInfo(HttpServletRequest request, HashMap<String, Object> params) throws Exception {
 	    List<Integer> file_seq = fileService.uploadFile(request, filePath);
-	    if(file_seq.size() >= 1){
+	    if(file_seq != null){
 	        params.put("FILE_SEQ", file_seq.get(0));
 	    }
 
@@ -67,7 +67,7 @@ public class ParkingInfoServiceImpl implements ParkingInfoService{
         for(String SEC_TYPE : SEC_TYPE_arr) {
             params2.put("PARK_SEQ", PARK_SEQ);
             params2.put("SEC_TYPE", SEC_TYPE);
-            params2.put("REG_SEQ", params.get("REG_SEQ"));
+            params2.put("REG_SEQ", params.get("REG_SEQ"));            
             params2.put("SEC_COUNT", SEC_COUNT_arr[i]);
             params2.put("SEC_DIS", SEC_DIS_arr[i]);
             this.insertSection(params2);
@@ -81,7 +81,7 @@ public class ParkingInfoServiceImpl implements ParkingInfoService{
     public int updateParkingInfo(HttpServletRequest request, HashMap<String, Object> params) throws Exception {
         /* 파일 업로드 이후( FILE TABLE INSERT까지) SEQ리턴  // 여러파일 가능 ... */
         List<Integer> file_seq = fileService.uploadFile(request, filePath);
-        if(file_seq!= null && file_seq.size() >= 1){
+        if(file_seq!= null){
             params.put("FILE_SEQ", file_seq.get(0));    /* 결과 가 있을때 파일 SEQ 심어줌.*/
         }
 
@@ -117,7 +117,6 @@ public class ParkingInfoServiceImpl implements ParkingInfoService{
             }
             i++;
         }
-
         if(!secSeqs.equals("")) {   /* 신규/ 수정 된 애들이 존재하니? */
             HashMap<String, Object> params3 = new HashMap<>();
             params3.put("PARK_SEQ", PARK_SEQ);
@@ -152,7 +151,7 @@ public class ParkingInfoServiceImpl implements ParkingInfoService{
     public int insertSection(HashMap<String,Object> params) throws Exception{
         return parkingInfoDao.insertSection(params);
     }
-
+    
     @Override
     public int updateSection(HashMap<String,Object> params) throws Exception{
         return parkingInfoDao.updateSection(params);
@@ -169,4 +168,7 @@ public class ParkingInfoServiceImpl implements ParkingInfoService{
     	return parkingInfoDao.selectSubcodeByRY();
     }
 
+    public HashMap<String, Object> selectParkingInfoFileImage(int PARK_SEQ){
+    	return parkingInfoDao.selectParkingInfoFileImage(PARK_SEQ);
+    }
 }

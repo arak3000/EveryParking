@@ -1,12 +1,15 @@
 package com.everyparking.admin.api.parkingBlock.controller;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import com.everyparking.admin.api.parkingManage.service.ParkingInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,6 +26,9 @@ public class ParkingBlockRestController extends BaseController {
 
 	@Autowired
 	ParkingBlockService parkingBlockService;
+
+    @Autowired
+    ParkingInfoService parkingInfoService;
 
     @RequestMapping("/selectListParkingBlock")
     public ModelAndView selectListParkingBlock(@RequestBody HashMap<String,Object> params) throws Exception{
@@ -64,14 +70,34 @@ public class ParkingBlockRestController extends BaseController {
         }
         return mav;
     }
-    
 
+    @RequestMapping("/getSectionInfo")
+    public ModelAndView getSectionInfo(@RequestBody HashMap<String, Object> params) throws Exception {
+        ModelAndView mav = null;
+        try {
+            mav = super.createMav(parkingBlockService.getSectionInfo(params));
+        } catch(Exception e) {
+            logger.error(e.getMessage());
+            super.setMessage(mav, Ajax.FAIL+"."+Ajax.TYPE_FAIL);
+        }
+        return mav;
+    }
 
-
-
-
-
-
-
-
+    @RequestMapping("/insertBlock")
+    public ModelAndView insertBlock(@RequestParam HashMap<String, Object> params) {
+        ModelAndView mav = createMav();
+        try {
+            int result = parkingBlockService.insertBlock(params);
+            if(result > -1) {
+                mav = super.createMav(result);
+            } else {
+                mav = super.createMav(result);
+                mav = createMav(Ajax.FAIL+"."+Ajax.TYPE_FAIL);
+            }
+        } catch (Exception e) {
+            super.setMessage(mav, Ajax.FAIL+"."+Ajax.TYPE_FAIL);
+            logger.error(e.getMessage());
+        }
+        return mav;
+    }
 }

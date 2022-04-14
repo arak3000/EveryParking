@@ -1,9 +1,9 @@
-/*
+/**
 작성자:김청룡
 수정자:
 작성일:2022-03-08
 수정일:
-*/
+**/
 
 // id값을 통해 선택할 수 있습니다.
 const datepickerR = document.getElementById('datepickerR');
@@ -11,17 +11,17 @@ const datepickerN = document.getElementById('datepickerN');
 const readEditor = document.getElementById('readEditor');
 const writeEditor = document.getElementById('writeEditor');
 const testGridid = document.getElementById('testGrid');
+let editor;
 
-
-// 시간을 포함해서 날짜를 선택해야할때
 if(datepickerR) {
     $('input[name="daterange"]').daterangepicker({
         minDate: new Date(),
         autoUpdateInput: true,
         timePicker: true,
+        timePicker24Hour: true,
         locale: {
             "separator": " ~ ",                     // 시작일시와 종료일시 구분자
-            "format": 'YYYY년 MM월 DD일 hh시',                 // 일시 노출 포맷
+            "format": 'YYYY-MM-DD hh시',                 // 일시 노출 포맷
             "applyLabel": "확인",                    // 확인 버튼 텍스트
             "cancelLabel": "취소",                   // 취소 버튼 텍스트
             "daysOfWeek": ["일", "월", "화", "수", "목", "금", "토"],
@@ -72,6 +72,7 @@ if(datepickerN) {
 }
 
 
+
 // ckedior Read
 if(readEditor){
     ClassicEditor
@@ -93,12 +94,12 @@ if(readEditor){
 
 // ckeitor 작성을 위한 함수입니다.
 if(writeEditor){
-    let editor;
 
     ClassicEditor
         .create( document.querySelector( '#writeEditor' ) , {
+            placeholder: '여기서 본문을 작성해주세요',
             ckfinder: {
-                uploadUrl: '/admin/test/imageUpload'
+                uploadUrl: '/admin/editor/uploadView'
             }
         } )
         .then( newEditor => {
@@ -116,7 +117,7 @@ if(writeEditor){
             console.error( error );
         } );
 
-    function uploadData() {
+    function uploadDataExample() {
         const editorData = editor.getData();
         console.log(typeof(editorData));
 
@@ -239,6 +240,110 @@ if(testGridid) {
     }
 }
 
+
+/*
+ *  작성자 : 홍종화
+ *  작성일 : 22-04-03
+ *  html escape 용 함수
+ */
+function escapeHtml(str) {
+	var map = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#039;'
+	};
+	return str.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+(function($){
+
+    // 삭제 팝업
+    var popWrap01 = $('.popWrap01');
+    var delBtn = $('.delete');
+    var popclose01 = popWrap01.find('.canselBtn');
+    var popclose02 = popWrap01.find('.delBtn');
+
+    delBtn.on('click',function(){
+        popWrap01.css({"display":"block"});
+    });
+    popclose01.on('click',function(){
+        popWrap01.css({"display":"none"});
+    });
+    popclose02.on('click',function(){
+        popWrap01.css({"display":"none"});
+    });
+
+
+    //차단 사유 팝업
+    var popWrap02 = $('.popWrap02');
+    var blockReason01 = $('.blockReason.01');
+    var blockReason02 = $('.blockReason.02');
+    var blockReason03 = $('.blockReason.03');
+    var blockReasonHtml01 = $('.blockReason.01').html();
+    var blockReasonHtml02 = $('.blockReason.02').html();
+    var blockReasonHtml03 = $('.blockReason.03').html();
+    var blockReasonText = $('.blockReasonText');
+    var popclose = popWrap02.find('.okBtn');
+
+    blockReason01.on('click',function(){
+        popWrap02.css({"display":"block"});
+        blockReasonText.html(blockReasonHtml01);
+    });
+    blockReason02.on('click',function(){
+        popWrap02.css({"display":"block"});
+        blockReasonText.html(blockReasonHtml02);
+    });
+    blockReason03.on('click',function(){
+        popWrap02.css({"display":"block"});
+        blockReasonText.html(blockReasonHtml03);
+    });
+    popclose.on('click',function(){
+        popWrap02.css({"display":"none"});
+    });
+
+
+    //파일 업로드 시 input창에 파일명 출력
+    $("#file").on('change',function(){
+        var fileName = $("#file").val();
+        $(".upload-name").val(fileName);
+    });
+
+
+    //daterangepicker
+    
+    // 시간 표기 없는 datepicker
+    $('input[name="daterange"].datepicker02').daterangepicker({
+        locale: {
+            "separator": " ~ ",               // 시작일시와 종료일시 구분자
+            "format": 'YYYY-MM-DD',     // 일시 노출 포맷
+            "applyLabel": "확인",             // 확인 버튼 텍스트
+            "cancelLabel": "취소",            // 취소 버튼 텍스트
+            "daysOfWeek": ["일", "월", "화", "수", "목", "금", "토"],
+            "monthNames": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+            },
+            timePicker: false,              // 시간 노출 여부
+            /* showDropdowns: true,           // 년월 수동 설정 여부 */
+            timePicker24Hour: false           // 24시간 노출 여부(ex> true : 23:50, false : PM 11:50) */
+        });
+
+    // 시간 표기 있는 datepicker
+     $('input[name="daterange"].datepicker').daterangepicker({
+        locale: {
+            "separator": " ~ ",               // 시작일시와 종료일시 구분자
+            "format": 'YYYY-MM-DD HH:00',     // 일시 노출 포맷
+            "applyLabel": "확인",             // 확인 버튼 텍스트
+            "cancelLabel": "취소",            // 취소 버튼 텍스트
+            "daysOfWeek": ["일", "월", "화", "수", "목", "금", "토"],
+            "monthNames": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+            },
+            timePicker: true,              // 시간 노출 여부 */
+            /* showDropdowns: true,           // 년월 수동 설정 여부 */
+            timePicker24Hour: true,           // 24시간 노출 여부(ex> true : 23:50, false : PM 11:50)
+        });
+
+})(jQuery);
 
 
 

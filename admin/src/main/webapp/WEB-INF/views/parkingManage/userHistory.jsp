@@ -2,35 +2,94 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+      <div class="content">
 
-<div class="col mx-3"><!-- 실질적 내용 변경 구역-->
-    <div class="row"><!-- top title-->
-        <div class="col text-start p-0">
-            <h1 style="font-weight: bold;">이용 내역 조회<span class="fs-6 fw-light"> 주차장 이용 현황을 확인할 수 있습니다</span></h1>
+        <!-- top -->
+        <div class="top">
+          <div class="title">
+            <h1> 이용 내역 조회 </h1>
+            <span> 주차장 관리 > 이용 내역 조회 </span>
+          </div>
+
+          <!-- topBtn -->
+          <button class="topBtn">
+            <a href="../profitCost/profitTable"> 내역 조회 </a>
+          </button>
+           <!-- // topBtn -->
+
         </div>
-        <div class="col-2 mt-4 px-0 text-end">
-            <button class="btn btn-light btn-sm adminBorder borderBottom" onclick="location.href='../../profitCost/profitTable'">내역 조회</button>
-        </div>
-    </div>
-    <div class="row mt-4 align-items-center"><!-- 검색 옵션 구역-->
+        <!-- // top -->
         
-        <div class="col px-0">
-            <select class="form-select" aria-label="Default select example" onchange="searchGrid('#profitTable', this.value)">
+        <!-- mainCon -->
+        <div class="mainCon">
+
+          <!-- main -->
+          <div class="main">
+            
+            <!-- mainCon-TopWrap -->
+            <div class="mainCon-TopWrap">
+
+              <!-- dropDownBoxWrap -->
+              <div class="dropDownBoxWrap">
+
+                <!-- dropDownBox01 -->
+                <form class="dropDownBox01">
+                  <select onchange="searchGrid('#userHistory', this.value)">
 					<option selected>전체</option>
 					<c:forEach items="${list}" var="data">
-						<option value="${data.PARK_NAME}">${data.PARK_NAME}</option>
+						<option value="${data.PARK_SEQ}">${data.PARK_NAME}</option>
 					</c:forEach>
 					<!-- 예약 기간 검색 변수 아마 따로 계산 값으로? -->
 				</select>
-        </div>
-        <div class="col-10"></div>
-    </div>
-    <div class="row mt-3 mb-3 backgroundColorwhite adminBorder borderBottom" style="height: 600px; position: relative;">
-		<div class="col px-0">	
-			<table class="table table-bordered text-center mb-0" id="userHistory"></table>
-		</div>
-		<div id="pagingBlock2" style="position: absolute; justify-content:center; display:flex; bottom: 1%;"></div>
-	</div>
-</div>
+                </form>
+                <!-- // dropDownBox01 -->
 
+                <!-- calenderWrap -->
+                <div class="calendarWrap">
+                  <input name="daterange" class="datepicker02" type="text" id='datepickerN'>
+                  <span class="calendar"></span> 
+                </div>
+                <button class="calendarSearch" type="submit" onclick="searchDate();"> 검색 </button>
+                <!-- // calenderWrap --> 
+
+              </div>
+              <!-- // dropDownBoxWrap -->
+
+            </div>
+            <!-- mainConTopWrap -->
+            
+            <!-- tableWrap -->
+            <div class="tableWrap">
+
+              <!-- table -->
+              <table class="table" id="userHistory">
+                <colgroup>
+                  <col style="width:3.5%;">
+                  <col style="width:15%;">
+                  <col style="width:15%;">
+                  <col style="width:45%;">
+                  <col style="width:15%;">
+                  <col style="width:6.5%;">
+                </colgroup>
+                
+              </table>
+              <!-- // table -->
+
+            </div>
+            <!-- // tableWrap -->
+            <div id="pagingBlock2" class="page"></div>
+
+          </div>
+          <!-- // main -->
+
+          <!-- rightBottomBtn -->
+          <div class="rightBottomBtn">
+            <button type="button" onclick="excelDown('#userHistory', '/excel/userHistory')"> 엑셀 다운로드 </button>
+          </div>
+          <!-- // rightBottomBtn -->          
+
+        </div>
+        <!-- // mainCon -->
+        
+      </div>
 <script src="/js/parkingManage/userHistory.js"></script>

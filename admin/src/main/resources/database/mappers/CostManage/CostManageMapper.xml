@@ -12,7 +12,7 @@
 			,COST_NAME
 			,COST_CONT
 			,COST_PRICE
-			,COST_DATE
+			,DATE_FORMAT(COST_DATE, '%Y-%m-%d') AS COST_DATE
 			,PARK_NAME
 			,pc.REG_SEQ
 			,pc.REG_DATE
@@ -27,12 +27,12 @@
 		AND pc.USE_YN = 'Y'
 	</sql>
 	<sql id="costSearch">
-		<if test='SEARCHCOND != null and !SEARCHCOND.equals("")'>
-			AND t1.PARKNAME LIKE CONCAT('%',#{SEARCHCOND},'%')
+		<if test='SEARCHCOND != null and !SEARCHCOND.equals("전체")'>
+			AND pc.PARK_SEQ = #{SEARCHCOND}
 		</if>
 		<if test='SEARCHKEY != null and !SEARCHKEY.equals("")'>
-			AND <![CDATA[ t1.REGDATE => str.to.date(substr("#{SEARCHKEY}", 1, 10), '%Y-%m-%d')
-            AND t1.REGDATE <= str.to.date(substr("#{SEARCHKEY}", 14, 24), '%Y-%m-%d') ]]>
+			AND <![CDATA[ pc.COST_DATE >= STR_TO_DATE(substr(#{SEARCHKEY}, 1, 10), '%Y-%m-%d')
+            AND pc.COST_DATE <= STR_TO_DATE(CONCAT(substr(#{SEARCHKEY}, 14, 24), ' 23:59:59'), '%Y-%m-%d %H:%i:%s') ]]>
 		</if>
 	</sql>
 
@@ -68,9 +68,49 @@
 		)z
 	</select>
 
+	<select id="selectOneCost" parameterType="hashMap" resultType="hashMap">
+		/* profitCostMapper.selectOneCost [ 수익 조회 - 정자운 ] */
+		<include refid="costManageSql"></include>
+	 	AND COST_SEQ = #{COST_SEQ}
+	</select>
+	
+	<update id="insertCost" parameterType="hashMap">
+        /* profitCostMapper.insertCost [ 수익 수정 - 정자운 ]  */
+        INSERT INTO p_costmanage (
+        	PARK_SEQ    
+			, COST_NAME 
+			, COST_CONT 
+			, COST_PRICE
+			, COST_DATE 
+			, REG_SEQ 
+			, REG_DATE
+		) VALUES (
+			#{ PARK_SEQ   }    
+			, #{ COST_NAME  }   
+			, #{ COST_CONT  }   
+			, #{ COST_PRICE }   
+			, #{ COST_DATE  }   
+			, #{ REG_SEQ }
+			, NOW()
+		)
+    </update>
+	
+	
+	<update id="updateCost" parameterType="hashMap">
+        /* profitCostMapper.updateCost [ 수익 수정 - 정자운 ]  */
+        UPDATE p_costmanage SET
+			PARK_SEQ   = #{ PARK_SEQ   }
+			, COST_NAME  = #{ COST_NAME  }
+			, COST_CONT  = #{ COST_CONT  }
+			, COST_PRICE = #{ COST_PRICE }
+			, COST_DATE  = #{ COST_DATE  }
+			, MOD_SEQ = #{ MOD_SEQ }
+			, MOD_DATE = NOW()
+        WHERE COST_SEQ = #{ COST_SEQ }
+    </update>
 
 	<update id="deleteCost" parameterType="hashMap">
-        /* profitCostMapper.deleteProfit [ 수익 비용 삭제 - 김장문 ]  */
+        /* profitCostMapper.deleteCost [ 수익 비용 삭제 - 김장문 ]  */
         UPDATE p_costmanage SET
            USE_YN = 'N'
            , MOD_SEQ = #{MOD_SEQ}

@@ -37,6 +37,19 @@ public class CostManageServiceImpl implements CostManageService{
         return result;
     }
 
+
+    @Override
+    public int insertCost(HashMap<String, Object> params) throws Exception {
+    	return costManageDao.insertCost(params);
+    }
+    	
+
+    @Override
+    public int updateCost(HashMap<String, Object> params) throws Exception {
+    	return costManageDao.updateCost(params);
+    }
+    	
+    
     @Override
     public int deleteCost(HashMap<String, Object> params) throws Exception {
     	

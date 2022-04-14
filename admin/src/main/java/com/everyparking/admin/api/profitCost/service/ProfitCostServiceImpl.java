@@ -37,6 +37,7 @@ public class ProfitCostServiceImpl implements ProfitCostService{
         return result;
     }
 
+    
     @Override
     public int deleteProfitCost(HashMap<String, Object> params) throws Exception {
     	
@@ -53,8 +54,20 @@ public class ProfitCostServiceImpl implements ProfitCostService{
     
     // 작성자 : 전지나 | 내용 : profitChart
     @Override
-    public List<HashMap<String, Object>> selectProfitChartDataByMonth() throws Exception {  	
-    	List<HashMap<String, Object>> totalListByYearMonth = profitCostDao.selectProfitChartDataByMonth();
-    	return totalListByYearMonth;
+    public List<HashMap<String, Object>> selectChartByParkSeqAndYear(HashMap<String,Object> params) throws Exception {  	
+    	List<HashMap<String, Object>> reserChartData = profitCostDao.selectChartByParkSeqAndYear(params);
+    	return reserChartData;
+    }
+    
+    @Override
+    public List<HashMap<String, Object>> selectCostChartByParkSeqAndYear(HashMap<String, Object> params) throws Exception {
+    	List<HashMap<String, Object>> costChartData = profitCostDao.selectCostChartByParkSeqAndYear(params);
+    	return costChartData;
+    }
+    
+    @Override
+    public List<HashMap<String, Object>> selectSearchYear() throws Exception {
+    	List<HashMap<String, Object>> selectSearchYear = profitCostDao.selectSearchYear();
+    	return selectSearchYear;
     }
 }

@@ -28,19 +28,24 @@ public class NoticeManagementRestController extends BaseController {
 	
 	@Autowired
 	private NoticeService noticeService;
-
-	/*
-	@RequestMapping("/uploadTest")
-	public String uploadTest(HttpServletRequest request
-							, @RequestParam HashMap<String,Object> params
-							, String editorData
-							, String notiTitle) throws Exception {
-		System.out.println(editorData);
-		System.out.println(notiTitle);
-		noticeService.insertNotiTest(editorData, notiTitle, request, params);
-		return "sucess";
+	
+	@RequestMapping("/insertNoti")
+	public ModelAndView insertNoti(HttpServletRequest request
+			, @RequestParam HashMap<String, Object> params
+			) throws Exception{
+		
+		ModelAndView mav = super.createMav();
+		try {
+			SessionUtil.setCreator(request, params);
+			mav = super.createMav(noticeService.insertNoti(request, params));
+			super.setMessage(mav, Ajax.SAVE.TEXT+"."+Ajax.TYPE_SUCCESS);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			super.setMessage(mav, Ajax.SAVE.TEXT+"."+Ajax.TYPE_FAIL);
+		}
+		mav.setViewName("redirect: /noticeManagement/noticeManagement");
+		return mav;
 	}
-	*/
 	
 	@RequestMapping("/selectListNoti")
 	public ModelAndView selectListNoti(@RequestBody HashMap<String,Object> params) throws Exception{
@@ -54,6 +59,17 @@ public class NoticeManagementRestController extends BaseController {
 		return mav;
 	}
 
+	@RequestMapping("/getNotice")
+	public ModelAndView getNotice(int NOTI_SEQ) throws Exception{
+		ModelAndView mav = super.createMav();
+		try {
+			mav = super.createMav(noticeService.getNotice(NOTI_SEQ));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			super.setMessage(mav, Ajax.SEARCH.TEXT+"."+Ajax.TYPE_FAIL);
+		}
+		return mav;
+	}
 	
 	@RequestMapping("/updateNoti")
 	public ModelAndView updateNoti(HttpServletRequest request
@@ -81,13 +97,5 @@ public class NoticeManagementRestController extends BaseController {
 			super.setMessage(mav, Ajax.DELETE.TEXT+"."+Ajax.TYPE_FAIL);
 		}
 		return mav;
-	}
-	
-	@RequestMapping("/testlogin")
-	public ModelAndView testlogin(HttpServletRequest request) throws Exception {
-		HashMap<String,Object> params = new HashMap<>();
-		params.put("USER_SEQ", 0);
-		SessionUtil.setSessionData(request, "member", params );
-		return super.createMav(Ajax.SEARCH.TEXT+"."+Ajax.TYPE_SUCCESS);
 	}
 }

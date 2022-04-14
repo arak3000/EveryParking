@@ -1,32 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<div class="col mx-3">
-	<div class="row" style="height: 75px;">
-		<div class="col">
-			<div class="row" style="font-size: 40px; font-weight: bold;">
-				<div class="col px-0 text-start">주차장 홈</div>
-			</div>
-		</div>
+      <div class="content">
+        <!-- top -->
+        <div class="top">
+          <div class="title">
+            <h1> 주차장 홈 </h1>
+            <span> 주차장 관리 > 주차장 홈 </span>
+          </div>
 
-		<div class="col-2 text-end">
-			<div class="row">
-				<div class="col mt-4 px-0 d-grid">
-					<a href="./parkingRegister">
-						<button type="button" class="btn btn-light btn-sm adminBorder borderBottom">주차장 등록</button>
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
+          <!-- topBtn -->
+          <button class="topBtn">
+            <a href="/parkingManage/parkingRegister"> 주차장 등록 </a>
+          </button>
+           <!-- // topBtn -->
 
-	<!-- 테이블 -->
-	<div class="row mt-3 mb-3 backgroundColorwhite adminBorder borderBottom" style="height: 600px; position: relative;">
-		<div class="col px-0">
-			<table class="table table-bordered text-center mb-0" id="parkingZoneTable">
-			</table>
-		</div>
-		<div id="pagingBlock2" style="display: flex;justify-content: center;bottom:1%;"></div>
-	</div>
-</div>
+        </div>
+        <!-- // top -->
+        
+        <!-- mainCon -->
+        <div class="mainCon">
 
+          <!-- tableWrap -->
+          <div class="tableWrap">
+
+            <!-- table -->
+            <table class="table" id="parkingZoneTable">
+            </table>
+            <!-- // table -->
+
+          </div>
+          <!-- // tableWrap -->
+			<div id="pagingBlock2" class="page"></div>
+        <!-- // mainCon -->
+        
+      </div>
+<!-- // content -->
+
+    </div>
 <script type="text/javascript" src="/js/parkingManage/parkingZone.js"></script>

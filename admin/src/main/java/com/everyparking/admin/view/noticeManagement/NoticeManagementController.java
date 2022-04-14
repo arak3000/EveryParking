@@ -1,6 +1,7 @@
 package com.everyparking.admin.view.noticeManagement;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,11 +41,12 @@ public class NoticeManagementController extends BaseController {
 	
 	@RequestMapping("/readNoticePage")
 	public String readNoticePage(int NOTI_SEQ, Model model) throws Exception {
-
-		noticeService.notiReadCount(NOTI_SEQ);
 		
 		HashMap<String, Object> map = noticeService.getNotice(NOTI_SEQ);
 		model.addAttribute("noti", map);
+		
+		HashMap<String, Object> move = noticeService.getNextPrev(NOTI_SEQ);
+		model.addAttribute("move",move);
 
 		return"/noticeManagement/readNoticePage";
 	}
@@ -61,23 +63,5 @@ public class NoticeManagementController extends BaseController {
 		model.addAttribute("noti", map);
 				
 		return"/noticeManagement/noticeUpdateForm";
-	}
-	
-	@RequestMapping("/insertNoti")
-	public ModelAndView insertNoti(HttpServletRequest request
-			, @RequestParam HashMap<String, Object> params
-			) throws Exception{
-		
-		ModelAndView mav = super.createMav();
-		try {
-			SessionUtil.setCreator(request, params);
-			mav = super.createMav(noticeService.insertNoti(request, params));
-			super.setMessage(mav, Ajax.SAVE.TEXT+"."+Ajax.TYPE_SUCCESS);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			super.setMessage(mav, Ajax.SAVE.TEXT+"."+Ajax.TYPE_FAIL);
-		}
-		mav.setViewName("redirect: /noticeManagement/noticeManagement");
-		return mav;
 	}
 }
